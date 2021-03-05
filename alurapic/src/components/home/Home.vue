@@ -5,7 +5,7 @@
     <ul class="lista-fotos">
       <li class="lista-fotos-item" v-for="foto of fotosComFiltro">
         <meu-painel :titulo="foto.titulo">
-          <imagem-responsiva v-bind:url="foto.url" v-bind:titulo="titulo"/>
+          <imagem-responsiva v-meu-transform:scale='1.2' v-bind:url="foto.url" v-bind:titulo="titulo"/>
           <meu-botao tipo="button" rotulo="REMOVER" :confirmacao="false" @botaoAtivado="remove(foto)" estilo=""/>
         </meu-painel>
       </li>
@@ -18,12 +18,18 @@
   import ImagemResponsiva from '../shared/imagem-responsiva/ImagemResponsiva.vue'
   import Botao from '../shared/botao/Botao.vue'
 
+  import transform from '../../directives/Transform';
+
   export default {
 
     components: {
       'meu-painel' : Painel,
       'imagem-responsiva' : ImagemResponsiva,
       'meu-botao' : Botao
+    },
+
+    directives: {
+      'meu-transform': transform
     },
 
     data() {
@@ -33,6 +39,7 @@
         filtro: ''
       }
     },
+
     created() {
       this.$http.get('http://localhost:3000/v1/fotos')
       .then(res => res.json())
