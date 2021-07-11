@@ -2,23 +2,23 @@
 
   <div>
     <h1 class="centralizado">Cadastro</h1>
-    <h2 class="centralizado"></h2>
+    <h2 class="centralizado">{{ foto.titulo}}</h2>
 
     <form>
       <div class="controle">
         <label for="titulo">TÍTULO</label>
-        <input id="titulo" autocomplete="off">
-      </div>
+        <input id="titulo" autocomplete="off" v-model="foto.titulo">
+      </div>  
 
       <div class="controle">
         <label for="url">URL</label>
-        <input id="url" autocomplete="off">
-        <imagem-responsiva/>
+        <input id="url" autocomplete="off" v-model.lazy="foto.url">
+        <imagem-responsiva v-show="foto.url" :url="foto.url" :titulo="foto.titulo"/>
       </div>
 
       <div class="controle">
         <label for="descricao">DESCRIÇÃO</label>
-        <textarea id="descricao" autocomplete="off"></textarea>
+        <textarea id="descricao" autocomplete="off" v-model="foto.descricao"></textarea>
       </div>
 
       <div class="centralizado">
@@ -41,6 +41,27 @@ export default {
 
     'imagem-responsiva': ImagemResponsiva, 
     'meu-botao': Botao
+  },
+  
+  data () {
+    return {
+      foto: {
+        titulo: '',
+        url: '',
+        descricao: ''
+      }
+    }
+  }, 
+  
+  methods: {
+    grava () {
+      console.log('Enviando dados para a API')
+      this.foto = {
+        titulo: '',
+        url: '',
+        descricao: ''
+      }
+    } 
   }
 }
 
