@@ -4,7 +4,7 @@
     <h1 class="centralizado">Cadastro</h1>
     <h2 class="centralizado">{{ foto.titulo}}</h2>
 
-    <form>
+    <form @submit="grava()">
       <div class="controle">
         <label for="titulo">TÍTULO</label>
         <input id="titulo" autocomplete="off" v-model="foto.titulo">
@@ -32,10 +32,9 @@
 
 <script>
 
-import ImagemResponsiva from '../shared/imagem-responsiva/ImagemResponsiva.vue';
+import ImagemResponsiva from '../shared/imagem-responsiva/ImagemResponsiva.vue'
 import Botao from '../shared/botao/Botao.vue';
-import Foto from '../../domain/Foto';
-
+import Foto from '../../domain/Foto.js';
 export default {
 
   components: {
@@ -52,8 +51,9 @@ export default {
   
   methods: {
     grava () {
-      console.log(`Enviando dados para a API ${this.foto}`)
-      this.foto = new Foto()
+      console.log(`${this.foto}`)
+      this.$http.post('http://localhost:3000/v1/fotos', this.foto)
+        .then(() => this.foto = new Foto(), err => console.error(err))
     } 
   }
 }
