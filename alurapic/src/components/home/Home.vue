@@ -61,10 +61,12 @@
 
     methods: {
       remove(foto) {
-        console.log(this.foto)
-        console.log(foto)
         this.$http.delete(`http://localhost:3000/v1/fotos/${foto._id}`)
-        .then(() => this.mensagem = 'Foto removida com sucesso', (err) => {
+        .then(() => {
+            let index = this.fotos.indexOf(foto)
+            this.fotos.splice(index, 1)
+            this.mensagem = 'Foto removida com sucesso' 
+          }, (err) => {
           console.error(err);
           this.mensagem = 'Erro ao tentar remover a foto'
         })
