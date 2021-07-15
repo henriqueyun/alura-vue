@@ -22,7 +22,7 @@
     data() {
       // acessível do tempĺate
       return {
-        routes
+        routes: routes.filter(route => route.menu)
       }
     }
   }

@@ -17,7 +17,8 @@
 <script>
   import Painel from '../shared/painel/Painel.vue';
   import ImagemResponsiva from '../shared/imagem-responsiva/ImagemResponsiva.vue'
-  import Botao from '../shared/botao/Botao.vue'
+  import Botao from '../shared/botao/Botao.vue';
+  import FotoService from '../../domain/FotoService';
 
   import transform from '../../directives/Transform';
 
@@ -43,9 +44,9 @@
     },
 
     created() {
-      this.$http.get('http://localhost:3000/v1/fotos')
-      .then(res => res.json())
-      .then(fotos => this.fotos = fotos, err => console.log(err))
+      this.service = new FotoService(this.$resource)
+      this.service.listar()
+        .then(fotos => this.fotos = fotos)
     },
 
     computed: {
@@ -53,7 +54,7 @@
         if(this.filtro) {
           let exp = new RegExp(this.filtro.trim(), 'i');
           return this.fotos.filter(foto => exp.test(foto.titulo))
-        } else {
+        } else {  
           return this.fotos;
         }
       }
@@ -61,7 +62,7 @@
 
     methods: {
       remove(foto) {
-        this.$http.delete(`http://localhost:3000/v1/fotos/${foto._id}`)
+        this.service.excluir(foto._id)
         .then(() => {
             let index = this.fotos.indexOf(foto)
             this.fotos.splice(index, 1)
@@ -71,8 +72,6 @@
           this.mensagem = 'Erro ao tentar remover a foto'
         })
       }
-
-      
     }
   }
 </script>
