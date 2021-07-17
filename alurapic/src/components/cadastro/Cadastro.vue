@@ -11,12 +11,14 @@
     <form @submit="grava()">
       <div class="controle">
         <label for="titulo">TÍTULO</label>
-        <input id="titulo" autocomplete="off" v-model="foto.titulo">
+        <input name="titulo" v-validate data-vv-rules="required|min:3|max:30" id="titulo" autocomplete="off" v-model="foto.titulo">
+        <span v-show="errors.has('titulo')">{{errors.first('titulo')}}</span>
       </div>  
 
       <div class="controle">
         <label for="url">URL</label>
-        <input id="url" autocomplete="off" v-model.lazy="foto.url">
+        <input name="url" v-validate data-vv-rules="required" id="url" autocomplete="off" v-model="foto.url">
+        <span v-show="errors.has('url')">{{errors.first('url')}}</span>
         <imagem-responsiva v-show="foto.url" :url="foto.url" :titulo="foto.titulo"/>
       </div>
 
@@ -57,13 +59,19 @@ export default {
   
   methods: {
     grava () {
-      this.service.cadastrar(this.foto)
-        .then(() => { 
-          if (this.id) this.$router.push({ name: 'home'})
-            console.log(`antes ${JSON.stringify(this.foto)}`);
-            this.foto = new Foto() ;
-            console.log(`depois ${JSON.stringify(this.foto)}`);
-          } , err => console.error(err));
+      this.$validator
+        .validateAll()
+        .then(success => {
+          if (success) {
+            this.service.cadastrar(this.foto)
+              .then(() => { 
+                if (this.id) this.$router.push({ name: 'home'})
+                  console.log(`antes ${JSON.stringify(this.foto)}`);
+                  this.foto = new Foto() ;
+                  console.log(`depois ${JSON.stringify(this.foto)}`);
+                } , err => console.error(err));
+          }
+        })
     }
   },
 
